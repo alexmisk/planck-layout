@@ -1,0 +1,25 @@
+style: github
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: https://github.com/alexmisk/planck-layout
+options:
+  commits:
+     filters:
+       Type:
+         - feat
+         - fix
+         - style
+  commit_groups:
+     title_maps:
+       feat: Added features
+       fix: Fixes
+       style: Style changes
+  header:
+    pattern: "^(\\w*)\\:\\s(.*)$"
+    pattern_maps:
+      - Type
+      - Subject
+  notes:
+    keywords:
+      - BREAKING CHANGE
