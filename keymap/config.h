@@ -36,4 +36,4 @@
 
 // Most tactile encoders have detents every 4 stages
 #define ENCODER_RESOLUTION 4
-
+#define USB_MAX_POWER_CONSUMPTION 100
