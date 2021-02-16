@@ -78,20 +78,47 @@ enum planck_keycodes {
 #define RUDOT LSFT(KC_7)
 
 
+
+typedef struct {
+    bool is_press_action;
+    uint8_t state;
+} tap;
+
+// Define a type for as many tap dance states as you need
+enum {
+    SINGLE_TAP = 1,
+    SINGLE_HOLD,
+};
+
+enum {
+    LOW_ALF,
+};
+
+// Declare the functions to be used with your tap dance key(s)
+
+// Function associated with all tap dances
+uint8_t cur_dance(qk_tap_dance_state_t *state);
+
+// Functions associated with individual tap dances
+void ql_finished(qk_tap_dance_state_t *state, void *user_data);
+void ql_reset(qk_tap_dance_state_t *state, void *user_data);
+
+
+// Keymap
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_QWERTY] = LAYOUT_planck_grid(
 KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,
-CTL_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,     KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+CTL_TAB, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,     KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
 KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,     KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC,
-KC_F18,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,   MOUSE,    KC_SPC,  RAISE,   WIN50L,  WIN50R,  XXXXXXX, KC_ENT
+KC_F18,  KC_LCTL, KC_LALT, KC_LGUI, TD(LOW_ALF),   MOUSE,    KC_SPC,  RAISE,   WIN50L,  WIN50R,  XXXXXXX, KC_ENT
 ),
 
 [_LOWER] = LAYOUT_planck_grid(
 TIMER,   TYPOGR,  ADD_TSK, CLIPBRD, SCRSHT,  CURLL,    CURLR,   KC_P7,   KC_P8,   KC_P9,   KC_PMNS, KC_PSLS,
 PREV,    NEXT,    VOL_DN,  PLAY,    VOL_UP,  RUCOMMA,  RUDOT,   KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_PAST,
 _______, SEL_ALL, CUT,     COPY,    PASTE,   KC_MINS,  KC_EQL,  KC_P1,   KC_P2,   KC_P3,   KC_PEQL, KC_PDOT,
-_______, _______, _______, _______, _______, ALFRED,   ALFRED,  KC_P0,   WIN33L,  WIN66R,  WIN100,  _______
+_______, _______, _______, _______, _______, _______,  _______, KC_P0,   WIN33L,  WIN66R,  WIN100,  _______
 ),
 
 [_RAISE] = LAYOUT_planck_grid(
@@ -115,4 +142,45 @@ _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,    MI_OFF,  TERM_ON, TERM_OF
 _______, _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______, _______
 )
 
+};
+
+
+// Determine the current tap dance state
+uint8_t cur_dance(qk_tap_dance_state_t *state) {
+    if (state->count == 1) {
+        if (!state->pressed) return SINGLE_TAP;
+        else return SINGLE_HOLD;
+    } else return 8;
+}
+
+// Initialize tap structure associated with example tap dance key
+static tap ql_tap_state = {
+    .is_press_action = true,
+    .state = 0
+};
+
+// Functions that control what our tap dance key does
+void ql_finished(qk_tap_dance_state_t *state, void *user_data) {
+    ql_tap_state.state = cur_dance(state);
+    switch (ql_tap_state.state) {
+        case SINGLE_TAP:
+            tap_code16(ALFRED);
+            break;
+        case SINGLE_HOLD:
+            layer_on(_LOWER);
+            break;
+    }
+}
+
+void ql_reset(qk_tap_dance_state_t *state, void *user_data) {
+    // If the key was held down and now is released then switch off the layer
+    if (ql_tap_state.state == SINGLE_HOLD) {
+        layer_off(_LOWER);
+    }
+    ql_tap_state.state = 0;
+}
+
+// Associate our tap dance key with its functionality
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [LOW_ALF] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ql_finished, ql_reset, 75)
 };
