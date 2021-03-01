@@ -26,14 +26,6 @@ enum planck_layers {
   _ADJUST
 };
 
-enum planck_keycodes {
-  BASE = SAFE_RANGE,
-  LOWER,
-  RAISE,
-  MOUSE,
-  ADJUST
-};
-
 // Layer shortcuts
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
