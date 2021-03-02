@@ -17,7 +17,6 @@
 #include QMK_KEYBOARD_H
 #include "muse.h"
 
-
 enum planck_layers {
   _BASE,
   _LOWER,
@@ -71,32 +70,7 @@ enum planck_layers {
 #define RUCOMMA LSFT(KC_6)
 #define RUDOT LSFT(KC_7)
 
-
-
-typedef struct {
-    bool is_press_action;
-    uint8_t state;
-} tap;
-
-// Define a type for as many tap dance states as you need
-enum {
-    SINGLE_TAP = 1,
-    SINGLE_HOLD,
-};
-
-enum {
-    LOW_ALF,
-};
-
-// Declare the functions to be used with your tap dance key(s)
-
-// Function associated with all tap dances
-uint8_t cur_dance(qk_tap_dance_state_t *state);
-
-// Functions associated with individual tap dances
-void ql_finished(qk_tap_dance_state_t *state, void *user_data);
-void ql_reset(qk_tap_dance_state_t *state, void *user_data);
-
+#include "tapdance.c"
 
 // Keymap
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -116,7 +90,7 @@ _______, _______, _______, _______, _______, _______,  _______, KC_P0,  _______,
 ),
 
 [_RAISE] = LAYOUT_planck_grid(
-XXXXXXX, KC_TILD, KC_NUBS, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, WIN50L,  WIN100,  WIN50R,  XXXXXXX, XXXXXXX,
+XXXXXXX, KC_TILD, KC_NUBS, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, TD(WIN_L),WIN100, TD(WIN_R),  XXXXXXX, XXXXXXX,
 KC_CAPS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______,
 CURLL,   KC_GRV,  KC_CIRC, KC_AMPR, KC_ASTR, KC_QUES,  _______, KC_BSPC, RMWRD,   RMLINE,  _______, CURLR,
 _______, _______, _______, _______, ADJUST,  _______,  _______, _______, _______, _______, _______, _______
@@ -145,43 +119,3 @@ _______, _______, _______, _______, _______, _______,  _______, _______, _______
 
 };
 
-
-// Determine the current tap dance state
-uint8_t cur_dance(qk_tap_dance_state_t *state) {
-    if (state->count == 1) {
-        if (!state->pressed) return SINGLE_TAP;
-        else return SINGLE_HOLD;
-    } else return 8;
-}
-
-// Initialize tap structure associated with example tap dance key
-static tap ql_tap_state = {
-    .is_press_action = true,
-    .state = 0
-};
-
-// Functions that control what our tap dance key does
-void ql_finished(qk_tap_dance_state_t *state, void *user_data) {
-    ql_tap_state.state = cur_dance(state);
-    switch (ql_tap_state.state) {
-        case SINGLE_TAP:
-            tap_code16(ALFRED);
-            break;
-        case SINGLE_HOLD:
-            layer_on(_LOWER);
-            break;
-    }
-}
-
-void ql_reset(qk_tap_dance_state_t *state, void *user_data) {
-    // If the key was held down and now is released then switch off the layer
-    if (ql_tap_state.state == SINGLE_HOLD) {
-        layer_off(_LOWER);
-    }
-    ql_tap_state.state = 0;
-}
-
-// Associate our tap dance key with its functionality
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [LOW_ALF] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ql_finished, ql_reset, 75)
-};
