@@ -91,7 +91,7 @@ _______, _______, _______, _______, _______, _______,  _______, KC_P0,  _______,
 
 [_RAISE] = LAYOUT_planck_grid(
 XXXXXXX, KC_TILD, KC_NUBS, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, TD(WIN_L),WIN100, TD(WIN_R),  XXXXXXX, XXXXXXX,
-KC_CAPS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______,
+KC_CAPS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_F18, _______,
 CURLL,   KC_GRV,  KC_CIRC, KC_AMPR, KC_ASTR, KC_QUES,  _______, KC_BSPC, RMWRD,   RMLINE,  _______, CURLR,
 _______, _______, _______, _______, ADJUST,  _______,  _______, _______, _______, _______, _______, _______
 ),
