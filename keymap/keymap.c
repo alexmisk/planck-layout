@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,
 CTL_TAB, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,     KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
 KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,     KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC,
-KC_F18,  KC_LCTL, KC_LALT, KC_LGUI, TD(LOW_ALF),   MOUSE,    KC_SPC,  RAISE,   FUNCT,  XXXXXXX,  XXXXXXX, KC_ENT
+KC_F18,  KC_LCTL, KC_LALT, KC_LGUI, TD(LOW_ALF),   KC_ENT,    KC_SPC,  RAISE,   FUNCT,  XXXXXXX,  XXXXXXX, XXXXXXX
 ),
 
 [_LOWER] = LAYOUT_planck_grid(
