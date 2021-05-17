@@ -15,15 +15,6 @@ enum {
 	WIN_R,
 };
 
-// Declare the functions to be used with your tap dance key(s)
-
-// Function associated with all tap dances
-uint8_t cur_dance(qk_tap_dance_state_t *state);
-
-// Functions associated with individual tap dances
-void ql_finished(qk_tap_dance_state_t *state, void *user_data);
-void ql_reset(qk_tap_dance_state_t *state, void *user_data);
-
 // Determine the current tap dance state
 uint8_t cur_dance(qk_tap_dance_state_t *state) {
     if (state->count == 1) {
